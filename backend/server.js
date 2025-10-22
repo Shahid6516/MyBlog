@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import cors from "cors"
+import authRoutes from "./routes/auth.route.js"
+import blogRoutes from "./routes/blog.route.js"
 
 // const router = express.Router();
 dotenv.config();
@@ -12,7 +14,8 @@ app.use(cors());
 app.use(express.json());
 
 
-
+app.use("/api/auth", authRoutes);
+app.use("/api/blogs", blogRoutes);
 
 app.listen(process.env.PORT, () => {
   connectDb();
