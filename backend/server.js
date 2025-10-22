@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 
-app.use("/api/auth", authRoutes);
+// app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 
 app.listen(process.env.PORT, () => {
