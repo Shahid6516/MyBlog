@@ -4,6 +4,7 @@ import Blog from "../models/blog.model.js";
 export const createBlog = async (req, res) => {
   try {
     const { title, content } = req.body;
+    // const thumbnail = req.file ? req.file.filename : null;
     if (!title || !content) {
       return res.status(400).json({
         success: false,
@@ -14,6 +15,7 @@ export const createBlog = async (req, res) => {
     const newBlog = new Blog({
       title,
       content,
+      // image: thumbnail,
     });
 
     const savedBlog = await newBlog.save();
@@ -95,15 +97,14 @@ export const updateBlog = async (req, res) => {
 // delete blog
 export const deleteBlog = async (req, res) => {
   try {
-    const {id} = req.params
-    const deleteBlog = await Blog.findByIdAndDelete(id)
+    const { id } = req.params;
+    const deleteBlog = await Blog.findByIdAndDelete(id);
 
     return res.status(200).json({
-       success:true,
-       message:"Blog deleted successfully",
-       deleteBlog
-       
-    })
+      success: true,
+      message: "Blog deleted successfully",
+      deleteBlog,
+    });
   } catch (error) {
     console.log(error);
   }

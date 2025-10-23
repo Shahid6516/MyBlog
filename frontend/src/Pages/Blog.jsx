@@ -11,7 +11,7 @@ const Blog = () => {
     const fetchPosts = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/blogs/allblogs");
-        setPosts(res.data.blogs || []);
+        setPosts(res.data.blogs);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
