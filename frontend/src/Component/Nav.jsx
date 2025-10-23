@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import logo from "../../public/logo.png"
+import logo from "../assets/logo.png"
 import { IoMenu, IoClose } from "react-icons/io5";
 
 const Nav = () => {
