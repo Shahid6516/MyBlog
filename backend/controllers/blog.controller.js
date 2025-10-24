@@ -1,10 +1,27 @@
 import Blog from "../models/blog.model.js";
+import cloudinary from '../config/cloudinary.js'
+import fs from "fs"
 
 // Create blog
 export const createBlog = async (req, res) => {
   try {
     const { title, content } = req.body;
-    // const thumbnail = req.file ? req.file.filename : null;
+   let imageUrl = null;
+
+    if (req.file) {
+      // Upload the image to Cloudinary
+      const uploadResponse = await cloudinary.uploader.upload(req.file.path, {
+        folder: "blog_thumbnails",
+      });
+
+      imageUrl = uploadResponse.secure_url;
+
+      // Only delete if file exists locally (not a URL)
+      if (req.file.path && !req.file.path.startsWith("http")) {
+        fs.unlinkSync(req.file.path);
+      }
+    }
+
     if (!title || !content) {
       return res.status(400).json({
         success: false,
@@ -15,7 +32,7 @@ export const createBlog = async (req, res) => {
     const newBlog = new Blog({
       title,
       content,
-      // image: thumbnail,
+      image: imageUrl,
     });
 
     const savedBlog = await newBlog.save();

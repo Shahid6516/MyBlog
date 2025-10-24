@@ -13,7 +13,7 @@ const Blog = () => {
         const res = await axios.get("http://localhost:5000/api/blogs/allblogs");
         setPosts(res.data.blogs);
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        console.error(error);
       }
     };
     fetchPosts();
@@ -33,7 +33,7 @@ const Blog = () => {
               key={post._id}
               className="w-80 bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
-              <img
+              <img src={post.image}
 
                 className="w-full h-48 object-cover"
               />
