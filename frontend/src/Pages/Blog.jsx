@@ -31,7 +31,7 @@ const Blog = () => {
           {posts.map((post) => (
             <div
               key={post._id}
-              className="w-80 bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="w-80 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
               <img src={post.image}
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from "../assets/logo.png"
-import { IoMenu, IoClose } from "react-icons/io5";
+import { IoMenu, IoClose } from "react-icons/io5"
 
 const Nav = () => {
     const navigate = useNavigate()
@@ -10,7 +10,7 @@ const Nav = () => {
     const toggleNavbar = () => setIsOpen(!isOpen)
 
     return (
-        <nav className="w-full fixed top-0 left-0 z-50">
+        <nav className="w-full bg-black fixed top-0 left-0 z-50">
             <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
                 <img className="w-20 h-12 object-contain" src={logo} alt="logo" />
 
