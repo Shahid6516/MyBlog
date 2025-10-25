@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 import Blog from './Pages/Blog'
 import Contact from './Pages/Contact'
 import Dashboard from './Pages/Dashboard'
+import Create from './Component/Create'
 
 const App = () => {
   return (
