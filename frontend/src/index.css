@@ -1,7 +1,21 @@
 @import "tailwindcss";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
 
 body{
     background-color: black;
     color: white;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.tox .tox-editor-container {
+  /* border-radius: 20px; */
 }

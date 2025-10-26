@@ -5,18 +5,18 @@ import fs from "fs"
 // Create blog
 export const createBlog = async (req, res) => {
   try {
-    const { title, content } = req.body;
-   let imageUrl = null;
+    const { title, content, image } = req.body; // include image from frontend
+    let imageUrl = image || null;
 
+    // Only upload if a file is sent (Postman case)
     if (req.file) {
-      // Upload the image to Cloudinary
       const uploadResponse = await cloudinary.uploader.upload(req.file.path, {
         folder: "blog_thumbnails",
       });
 
       imageUrl = uploadResponse.secure_url;
 
-      // Only delete if file exists locally (not a URL)
+      // Delete local file
       if (req.file.path && !req.file.path.startsWith("http")) {
         fs.unlinkSync(req.file.path);
       }
@@ -32,7 +32,7 @@ export const createBlog = async (req, res) => {
     const newBlog = new Blog({
       title,
       content,
-      image: imageUrl,
+      image: imageUrl, // store Cloudinary URL (frontend or backend upload)
     });
 
     const savedBlog = await newBlog.save();
@@ -43,6 +43,11 @@ export const createBlog = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
 
