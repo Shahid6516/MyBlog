@@ -7,6 +7,7 @@ import Contact from './Pages/Contact'
 import Dashboard from './Pages/Dashboard'
 import BlogDetails from './Pages/BlogDetails'
 import Login from './Pages/Login'
+import ProtectedRoute from './Component/ProtectedRoute'
 
 const App = () => {
   return (
@@ -18,9 +19,13 @@ const App = () => {
         <Route path='/about' element={<About />} />
         <Route path='/blog' element={<Blog />} />
         <Route path='/contact' element={<Contact />} />
-        <Route path='/admin' element={<Dashboard />} />
-        <Route path="/blog/:id" element={<BlogDetails/>} />
-        <Route path="/login" element={<Login/>} />
+        <Route path='/admin' element={
+          < ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/blog/:id" element={<BlogDetails />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
 
 

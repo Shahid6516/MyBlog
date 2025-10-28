@@ -40,18 +40,27 @@ const Dashboard = () => {
   };
 
   // 🗑️ Delete blog
+  
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this blog?")) return;
+  if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
-    try {
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`);
-      alert("Blog deleted successfully!");
-      fetchPosts(); // refresh list
-    } catch (error) {
-      console.error(error);
-      alert("Error deleting blog!");
-    }
-  };
+  try {
+    const token = localStorage.getItem("token");
+
+    await axios.delete(`http://localhost:5000/api/blogs/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    alert("Blog deleted successfully!");
+    // optionally refresh list:
+    // onBlogDeleted && onBlogDeleted();
+  } catch (error) {
+    console.error(error);
+    alert(error.response?.data?.message || "Failed to delete blog");
+  }
+};
 
   // ✏️ Edit blog
   const handleEdit = (post) => {

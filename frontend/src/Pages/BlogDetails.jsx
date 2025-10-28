@@ -37,20 +37,21 @@ const BlogDetails = () => {
         </h1>
 
         {blog.image && (
-          <img
+          <img 
             src={
               blog.image.startsWith("http")
                 ? blog.image
                 : `http://localhost:5000/${blog.image}`
+                
             }
             alt={blog.title}
-            className="w-full h-96 object-cover rounded-lg mb-6"
+            className="w-full h-96 object-cover mx-auto  rounded-lg mb-6"
           />
         )}
 
         {/* Full blog content with formatting */}
         <div
-          className="text-gray-300 text-lg"
+          className="text-white text-xl"
           dangerouslySetInnerHTML={{ __html: blog.content }}
         ></div>
 

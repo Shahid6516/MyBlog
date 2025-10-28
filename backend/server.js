@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import cors from "cors";
-import authRoutes from "./routes/auth.route.js";
+// import authRoutes from "./routes/auth.route.js";
+import authRoutes from "./routes/auth.route.js"
 import blogRoutes from "./routes/blog.route.js";
 
 dotenv.config();
@@ -14,7 +15,7 @@ app.use(express.json());
 
 
 
-// app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 
 
