@@ -4,6 +4,12 @@ import {upload}  from "../middleware/multer.js";
 const router = express.Router();
 
 
+router.post("/create", (req, res, next) => {
+  console.log("✅ /api/blogs/create route hit");
+  next();
+}, upload.single("thumbnail"), createBlog);
+
+
 // router.post("/create", createBlog);
 router.post("/create", upload.single("thumbnail"), createBlog);
 router.get("/allblogs", getAllBlogs);

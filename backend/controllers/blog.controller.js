@@ -91,8 +91,8 @@ export const getSingleBlog = async (req, res) => {
 // update blog
 export const updateBlog = async (req, res) => {
   try {
-    const { title, content } = req.body;
-    const updatedData = { title, content };
+    const { title, content, image } = req.body; // include image
+    const updatedData = { title, content, image };
 
     const updatedBlog = await Blog.findByIdAndUpdate(
       req.params.id,
@@ -101,7 +101,7 @@ export const updateBlog = async (req, res) => {
     );
 
     if (!updatedBlog) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
         message: "Blog not found",
       });
@@ -110,11 +110,17 @@ export const updateBlog = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Blog updated successfully",
+      blog: updatedBlog, // return updated blog
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating blog",
+    });
   }
 };
+
 
 // delete blog
 export const deleteBlog = async (req, res) => {

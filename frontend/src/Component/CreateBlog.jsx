@@ -1,13 +1,42 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 
-const CreateBlog = ({ onBlogCreated }) => {
+const CreateBlog = ({
+  onBlogCreated,
+  editMode = false,
+  existingPost = null,
+  onCancel,
+}) => {
   const editorRef = useRef(null);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(existingPost ? existingPost.title : "");
   const [imageFile, setImageFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [previewImage, setPreviewImage] = useState(
+    existingPost ? existingPost.image : ""
+  );
 
+  // ✅ Ensure editor content updates when switching between edit/create
+  useEffect(() => {
+    setTitle(existingPost ? existingPost.title : "");
+    setPreviewImage(existingPost ? existingPost.image : "");
+    if (editorRef.current) {
+      editorRef.current.setContent(existingPost ? existingPost.content || "" : "");
+    }
+  }, [existingPost]);
+
+  // 🖼️ Preview image before upload
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewImage(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // 🧠 Create or Update Blog
   const handlePublish = async () => {
     const content = editorRef.current ? editorRef.current.getContent() : "";
 
@@ -16,7 +45,7 @@ const CreateBlog = ({ onBlogCreated }) => {
       return;
     }
 
-    let imageUrl = "";
+    let imageUrl = existingPost ? existingPost.image : "";
 
     try {
       if (imageFile) {
@@ -34,23 +63,34 @@ const CreateBlog = ({ onBlogCreated }) => {
         setUploading(false);
       }
 
-      const res = await axios.post("http://localhost:5000/api/blogs/create", {
-        title,
-        content,
-        image: imageUrl, // send Cloudinary URL to backend
-      });
-
-      if (res.status === 201) {
-        alert("Blog published successfully!");
-        setTitle("");
-        editorRef.current.setContent("");
-        setImageFile(null);
-        onBlogCreated(); // refresh dashboard
+      if (editMode && existingPost) {
+        // ✏️ Update blog (PATCH request)
+        const res = await axios.patch(
+          `http://localhost:5000/api/blogs/${existingPost._id}`,
+          { title, content, image: imageUrl }
+        );
+        alert(res.data.message || "Blog updated successfully!");
+      } else {
+        // 🆕 Create new blog
+        const res = await axios.post("http://localhost:5000/api/blogs/create", {
+          title,
+          content,
+          image: imageUrl,
+        });
+        alert(res.data.message || "Blog published successfully!");
       }
+
+      // ✅ Reset form
+      setTitle("");
+      setImageFile(null);
+      setPreviewImage("");
+      if (editorRef.current) editorRef.current.setContent("");
+      onBlogCreated();
+      onCancel && onCancel();
     } catch (error) {
       console.error(error);
       setUploading(false);
-      alert("Error publishing blog!");
+      alert("Error saving blog!");
     }
   };
 
@@ -67,18 +107,26 @@ const CreateBlog = ({ onBlogCreated }) => {
       <input
         type="file"
         accept="image/*"
-        onChange={(e) => setImageFile(e.target.files[0])}
+        onChange={handleImageChange}
         className="mb-4"
       />
-      {imageFile && <p>Selected: {imageFile.name}</p>}
+
+      {previewImage && (
+        <img
+          src={previewImage}
+          alt="Preview"
+          className="w-48 h-32 object-cover rounded mb-3 border"
+        />
+      )}
 
       <Editor
         apiKey="7brf8ztlz1jyzmepgamoajm9o4rcrtrjjrau7obxo3n4h1g5"
         onInit={(evt, editor) => (editorRef.current = editor)}
-        initialValue="Start writing your blog here..."
+        initialValue={existingPost ? existingPost.content : ""}
         init={{
           height: 500,
           menubar: true,
+          branding: false,
           plugins: [
             "advlist autolink lists link image charmap preview anchor",
             "searchreplace visualblocks code fullscreen",
@@ -91,13 +139,28 @@ const CreateBlog = ({ onBlogCreated }) => {
         }}
       />
 
-      <button
-        onClick={handlePublish}
-        disabled={uploading}
-        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-      >
-        {uploading ? "Uploading..." : "Publish Blog"}
-      </button>
+      <div className="flex gap-3 mt-5">
+        <button
+          onClick={handlePublish}
+          disabled={uploading}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        >
+          {uploading
+            ? "Uploading..."
+            : editMode
+            ? "Update Blog"
+            : "Publish Blog"}
+        </button>
+
+        {editMode && (
+          <button
+            onClick={onCancel}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </div>
   );
 };
