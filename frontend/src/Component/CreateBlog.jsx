@@ -69,7 +69,7 @@ const CreateBlog = ({
         const res = await axios.patch(
           `http://localhost:5000/api/blogs/${existingPost._id}`,
           { title, content, image: imageUrl },
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } } 
 
           
         );
