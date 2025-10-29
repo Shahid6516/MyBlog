@@ -1,7 +1,6 @@
 # 📝 My Blog Website (MERN)
 
-A full-stack **Blog Website** built with the **MERN stack (MongoDB, Express.js, React, Node.js)**.  
-Users can read blogs, and the **admin** can securely manage (create, update, delete) blog posts through protected routes.
+My Blog Website is a full-stack web application built using the MERN stack (MongoDB, Express.js, React, Node.js), where users can read blogs and the admin can securely manage posts through protected routes. The project features user authentication, JWT-based admin authorization, and CRUD operations for blog posts. Admin routes are secured using middleware that verifies JWT tokens and checks admin privileges before allowing access. The frontend (React) communicates with the backend (Express, Node.js) via REST APIs, and data is stored in MongoDB using Mongoose. Passwords are hashed using Bcrypt, and environment variables are managed with Dotenv. The app offers a clean, responsive UI for readers and an admin dashboard for managing content efficiently.
 
 ---
 
