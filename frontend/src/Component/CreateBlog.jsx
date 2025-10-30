@@ -143,6 +143,8 @@ const CreateBlog = ({
         }}
       />
 
+    
+
       <div className="flex gap-3 mt-5">
         <button
           onClick={handlePublish}
